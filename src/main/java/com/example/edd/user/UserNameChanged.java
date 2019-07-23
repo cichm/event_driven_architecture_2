@@ -10,6 +10,9 @@ public class UserNameChanged implements DomainEvent {
     private String newNickName;
     private Instant when;
 
+    private UserNameChanged() {
+    }
+
     String getNewNickName() {
         return newNickName;
     }

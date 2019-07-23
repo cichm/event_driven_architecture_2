@@ -21,18 +21,53 @@ class UserRepositoryTest extends Specification {
         and:
         String userName = "Tomasz";
         and:
-        this.service = new UserService(new User(userId));
+        String userName2 = "Mariusz";
+        and:
+        this.service = new UserService(new User(userId), new ArrayList<DomainEvent>());
         and:
         this.subscriber = new Subscriber(new UserService());
+
         when:
         this.service.configure(subscriber);
         and:
         this.subscriber.subscribe(UserNameChanged.class, new Print())
         and:
-        this.subscriber.handleEvent(new UserActivated());
+        this.subscriber.handleEvent(new UserActivated(Instant.now()));
         and:
         this.subscriber.handleEvent(new UserNameChanged(userName, Instant.now()));
+        and:
+        this.subscriber.handleEvent(new UserNameChanged(userName2, Instant.now()));
+
         then:
-        this.service.getUserNickName() == userName;
+        this.service.byTime().getUserName() == userName2;
+    }
+
+    def 'should be able to load from a historic timestamp'() {
+        given:
+        UUID userId = UUID.randomUUID();
+        and:
+        String userName = "Tomasz";
+        and:
+        String userName2 = "Mariusz";
+        and:
+        this.service = new UserService(new User(userId), new ArrayList<DomainEvent>());
+        and:
+        this.subscriber = new Subscriber(new UserService());
+
+        when:
+        this.service.configure(subscriber);
+        and:
+        this.subscriber.subscribe(UserNameChanged.class, new Print())
+        and:
+        this.subscriber.handleEvent(new UserActivated(Instant.now()));
+        and:
+        this.subscriber.handleEvent(new UserNameChanged(userName, Instant.now()));
+        and:
+        def firstSaveTime = System.currentTimeMillis()
+        and:
+        this.subscriber.handleEvent(new UserNameChanged(userName2, Instant.now()));
+
+        then:
+        this.service.byTime(Instant.now().minusMillis(System.currentTimeMillis() - firstSaveTime)).getUserName() == userName;
     }
 }

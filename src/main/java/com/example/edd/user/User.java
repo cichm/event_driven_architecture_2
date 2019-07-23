@@ -44,4 +44,12 @@ public class User {
     public String getUserName() {
         return this.userEntity.getUserName();
     }
+
+    public UUID getUserUuid() {
+        return this.userEntity.getUuid();
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
 }
