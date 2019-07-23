@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,41 +22,23 @@ public class UserService {
         subscriber.subscribe(UserNameChanged.class, this::nameChangedUser);
     }
 
-    private UserService activateUser(UserActivated activated) {
+    private void activateUser(UserActivated activated) {
         this.user.activate();
         this.state.add(activated);
-        return this;
     }
 
-    private UserService deactivateUser(UserDeactivated deactivated) {
+    private void deactivateUser(UserDeactivated deactivated) {
         this.user.deactivate();
         this.state.add(deactivated);
-        return this;
     }
 
-    private UserService nameChangedUser(UserNameChanged nameChanged) {
+    private void nameChangedUser(UserNameChanged nameChanged) {
         this.user.nameChangedUser(nameChanged.getNewNickName());
         this.state.add(nameChanged);
-        return this;
-    }
-
-    public String getUserNickName() {
-        return this.user.getUserName();
     }
 
     public UserEntity byTime() {
-        User userFuture = new User(this.user.getUserUuid());
-        this.state.forEach(u -> {
-            if (u instanceof UserActivated) {
-                userFuture.activate();
-            }
-            else if (u instanceof UserDeactivated) {
-                userFuture.deactivate();
-            }
-            else if (u instanceof UserNameChanged) {
-                userFuture.nameChangedUser(((UserNameChanged) u).getNewNickName());
-            }
-        });
+        User userFuture = recreate(this.state, new User(this.user.getUserUuid()));
         return userFuture.getUserEntity();
     }
 
@@ -69,18 +50,20 @@ public class UserService {
             }
         }
 
-        User userFuture = new User(this.user.getUserUuid());
+        User userFuture = recreate(domainEvents, new User(this.user.getUserUuid()));
+        return userFuture.getUserEntity();
+    }
+
+    private User recreate(List<DomainEvent> domainEvents, User user) {
         domainEvents.forEach(u -> {
             if (u instanceof UserActivated) {
-                userFuture.activate();
-            }
-            else if (u instanceof UserDeactivated) {
-                userFuture.deactivate();
-            }
-            else if (u instanceof UserNameChanged) {
-                userFuture.nameChangedUser(((UserNameChanged) u).getNewNickName());
+                user.activate();
+            } else if (u instanceof UserDeactivated) {
+                user.deactivate();
+            } else if (u instanceof UserNameChanged) {
+                user.nameChangedUser(((UserNameChanged) u).getNewNickName());
             }
         });
-        return userFuture.getUserEntity();
+        return user;
     }
 }
