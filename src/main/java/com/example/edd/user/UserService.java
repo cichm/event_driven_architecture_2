@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -43,12 +44,9 @@ public class UserService {
     }
 
     public UserEntity byTime(Instant instant) {
-        List<DomainEvent> domainEvents = new ArrayList<>();
-        for (DomainEvent d: this.state) {
-            if (d.occuredAt().isBefore(instant)) {
-                domainEvents.add(d);
-            }
-        }
+        List<DomainEvent> domainEvents = this.state.stream()
+                .filter(d -> !d.occuredAt().isAfter(instant))
+                .collect(Collectors.toList());
 
         User userFuture = recreate(domainEvents, new User(this.user.getUserUuid()));
         return userFuture.getUserEntity();
