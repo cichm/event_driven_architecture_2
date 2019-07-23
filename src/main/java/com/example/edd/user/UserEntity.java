@@ -9,7 +9,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Setter
 @Getter
-public class UserEntity {
+class UserEntity {
     private UUID uuid;
     private UserState userState;
     private String userName = "";

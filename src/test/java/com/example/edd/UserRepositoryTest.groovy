@@ -6,9 +6,12 @@ import com.example.edd.user.UserActivated
 import com.example.edd.user.User
 import com.example.edd.user.UserNameChanged
 import com.example.edd.user.UserService
+import org.awaitility.Awaitility
 import spock.lang.Specification
 
 import java.time.Instant
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class UserRepositoryTest extends Specification {
 
@@ -25,7 +28,7 @@ class UserRepositoryTest extends Specification {
         and:
         this.service = new UserService(new User(userId), new ArrayList<DomainEvent>());
         and:
-        this.subscriber = new Subscriber(new UserService());
+        this.subscriber = new Subscriber(new UserService(), Executors.newFixedThreadPool(1));
 
         when:
         this.service.configure(subscriber);
@@ -39,7 +42,8 @@ class UserRepositoryTest extends Specification {
         this.subscriber.handleEvent(new UserNameChanged(userName2, Instant.now()));
 
         then:
-        this.service.byTime().getUserName() == userName2;
+        Awaitility.await().atMost(5, TimeUnit.SECONDS)
+                .until({this.service.byTime().getUserName() == userName2});
     }
 
     def 'should be able to load from a historic timestamp'() {
