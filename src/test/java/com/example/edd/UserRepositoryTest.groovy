@@ -56,7 +56,7 @@ class UserRepositoryTest extends Specification {
         and:
         this.service = new UserService(new User(userId), new ArrayList<DomainEvent>());
         and:
-        this.subscriber = new Subscriber(new UserService());
+        this.subscriber = new Subscriber(new UserService(), Executors.newFixedThreadPool(1));
 
         when:
         this.service.configure(subscriber);
@@ -72,6 +72,11 @@ class UserRepositoryTest extends Specification {
         this.subscriber.handleEvent(new UserNameChanged(userName2, Instant.now()));
 
         then:
-        this.service.byTime(Instant.now().minusMillis(System.currentTimeMillis() - firstSaveTime)).getUserName() == userName;
+        Awaitility.await().atMost(5, TimeUnit.SECONDS)
+                .until({
+                    this.service.byTime(
+                            Instant.now().minusMillis(System.currentTimeMillis() - firstSaveTime)
+                    ).getUserName() == userName;
+                })
     }
 }
