@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.2.3" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
-  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+<class-diagram version="1.2.3" icons="true" automaticImage="GIF" always-add-relationships="true" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <interface id="1" language="java" name="com.example.edd.DomainEvent" project="edd" 
     file="/edd/src/main/java/com/example/edd/DomainEvent.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="997" y="76"/>    
+    <position height="-1" width="-1" x="997" y="102"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -48,7 +48,7 @@
   </class>  
   <class id="6" language="java" name="com.example.edd.user.UserNameChanged" project="edd" 
     file="/edd/src/main/java/com/example/edd/user/UserNameChanged.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="741" y="305"/>    
+    <position height="-1" width="-1" x="741" y="103"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -75,7 +75,7 @@
   </enumeration>  
   <class id="9" language="java" name="com.example.edd.user.Print" project="edd" 
     file="/edd/src/main/java/com/example/edd/user/Print.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1435" y="269"/>    
+    <position height="-1" width="-1" x="662" y="322"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -84,63 +84,71 @@
   </class>  
   <class id="10" language="java" name="com.example.edd.user.UserActivated" project="edd" 
     file="/edd/src/main/java/com/example/edd/user/UserActivated.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1634" y="287"/>    
+    <position height="-1" width="-1" x="1223" y="101"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="11">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="12" name="userService"/>      
-      <multiplicity id="13" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="14">    
+  <realization id="11">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <association id="12">    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="15" name="userEntity"/>      
-      <multiplicity id="16" minimum="0" maximum="1"/>    
+      <attribute id="13" name="userEntity">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="14" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="17">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="1"/>  
-  </realization>  
-  <association id="18">    
+  <association id="15">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="19" name="user"/>      
-      <multiplicity id="20" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="21">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="22" name="state"/>      
-      <multiplicity id="23" minimum="0" maximum="2147483647"/>    
+      <attribute id="16" name="state">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="17" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="24">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="1"/>  
-  </realization>  
-  <association id="25">    
+  <association id="18">    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="26" name="userState"/>      
-      <multiplicity id="27" minimum="0" maximum="1"/>    
+      <attribute id="19" name="userState">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="20" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="28">    
+  <realization id="21">    
     <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <association id="22">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="23" name="user">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="24" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="25">    
+    <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="1"/>  
   </realization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

@@ -7,6 +7,7 @@ import com.example.edd.user.User
 import com.example.edd.user.UserNameChanged
 import com.example.edd.user.UserService
 import org.awaitility.Awaitility
+import spock.lang.Shared
 import spock.lang.Specification
 
 import java.time.Instant
@@ -15,68 +16,64 @@ import java.util.concurrent.TimeUnit
 
 class UserRepositoryTest extends Specification {
 
-    private UserService service;
-    private Subscriber subscriber;
+    @Shared
+    private UserService service
+    @Shared
+    private Subscriber subscriber
+    @Shared
+    UUID userId
+    @Shared
+    String userName
+    @Shared
+    String userName2
+
+    def setupSpec() {
+        userId = UUID.randomUUID()
+        userName = "Tomasz"
+        userName2 = "Mariusz"
+        service = new UserService(new User(userId), new ArrayList<DomainEvent>())
+        subscriber = new Subscriber(Executors.newFixedThreadPool(1))
+    }
 
     def 'should be able to save and load user'() {
         given:
-        UUID userId = UUID.randomUUID();
-        and:
-        String userName = "Tomasz";
-        and:
-        String userName2 = "Mariusz";
-        and:
-        this.service = new UserService(new User(userId), new ArrayList<DomainEvent>());
-        and:
-        this.subscriber = new Subscriber(new UserService(), Executors.newFixedThreadPool(1));
-
         when:
-        this.service.configure(subscriber);
+        this.service.configure(subscriber)
         and:
         this.subscriber.subscribe(UserNameChanged.class, new Print())
         and:
-        this.subscriber.handleEvent(new UserActivated(Instant.now()));
+        this.subscriber.handleEvent(new UserActivated(Instant.now()))
         and:
-        this.subscriber.handleEvent(new UserNameChanged(userName, Instant.now()));
+        this.subscriber.handleEvent(new UserNameChanged(userName, Instant.now()))
         and:
-        this.subscriber.handleEvent(new UserNameChanged(userName2, Instant.now()));
+        this.subscriber.handleEvent(new UserNameChanged(userName2, Instant.now()))
 
         then:
         Awaitility.await().atMost(5, TimeUnit.SECONDS)
-                .until({this.service.byTime().getUserName() == userName2});
+                .until({this.service.byTime().getUserName() == userName2})
     }
 
     def 'should be able to load from a historic timestamp'() {
         given:
-        UUID userId = UUID.randomUUID();
-        and:
-        String userName = "Tomasz";
-        and:
-        String userName2 = "Mariusz";
-        and:
-        this.service = new UserService(new User(userId), new ArrayList<DomainEvent>());
-        and:
-        this.subscriber = new Subscriber(new UserService(), Executors.newFixedThreadPool(1));
-
         when:
-        this.service.configure(subscriber);
+        this.service.configure(subscriber)
         and:
         this.subscriber.subscribe(UserNameChanged.class, new Print())
         and:
-        this.subscriber.handleEvent(new UserActivated(Instant.now()));
+        this.subscriber.handleEvent(new UserActivated(Instant.now()))
         and:
-        this.subscriber.handleEvent(new UserNameChanged(userName, Instant.now()));
+        this.subscriber.handleEvent(new UserNameChanged(userName, Instant.now()))
         and:
         def firstSaveTime = System.currentTimeMillis()
         and:
-        this.subscriber.handleEvent(new UserNameChanged(userName2, Instant.now()));
+        this.subscriber.handleEvent(new UserNameChanged(userName2, Instant.now()))
 
         then:
         Awaitility.await().atMost(5, TimeUnit.SECONDS)
                 .until({
                     this.service.byTime(
                             Instant.now().minusMillis(System.currentTimeMillis() - firstSaveTime)
-                    ).getUserName() == userName;
+                    ).getUserName() == userName
                 })
     }
 }

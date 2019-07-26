@@ -45,11 +45,11 @@ public class User {
         return this.userEntity.getUserName();
     }
 
-    public UUID getUserUuid() {
+    UUID getUserUuid() {
         return this.userEntity.getUuid();
     }
 
-    public UserEntity getUserEntity() {
+    UserEntity getUserEntity() {
         return userEntity;
     }
 }

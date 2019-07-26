@@ -6,7 +6,7 @@ import spock.lang.Specification
 class UserTest extends Specification {
     User user = new User(UUID.randomUUID())
 
-    def 'deactivated user cannot change nickname'() {
+    def 'The deactivated user cannot change nickname.'() {
         given:
         user.deactivate()
         when:
@@ -15,7 +15,7 @@ class UserTest extends Specification {
         thrown(IllegalStateException)
     }
 
-    def 'activated user can change nickname'() {
+    def 'The activated user can change nickname.'() {
         given:
         user.activate()
         when:
@@ -24,14 +24,14 @@ class UserTest extends Specification {
         user.getUserName() == "Barry"
     }
 
-    def 'new user can be activated'() {
+    def 'The new user can be activated.'() {
         when:
         user.activate()
         then:
         user.isActive()
     }
 
-    def 'activated can be deactivated'() {
+    def 'The activated can be deactivated.'() {
         given:
         user.activate()
         when:
@@ -40,7 +40,7 @@ class UserTest extends Specification {
         user.isDeactivate()
     }
 
-    def 'activated user cannot be activated'() {
+    def 'The activated user cannot be activated.'() {
         given:
         user.activate()
         when:
@@ -49,7 +49,7 @@ class UserTest extends Specification {
         thrown(IllegalStateException)
     }
 
-    def 'deactivated user cannot be deactivated'() {
+    def 'The deactivated user cannot be deactivated.'() {
         given:
         user.deactivate()
         when:

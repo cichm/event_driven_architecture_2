@@ -1,7 +1,6 @@
 package com.example.edd.cqrs;
 
 import com.example.edd.DomainEvent;
-import com.example.edd.user.UserService;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Closeable;
@@ -15,9 +14,8 @@ import java.util.function.Consumer;
 
 @RequiredArgsConstructor
 public class Subscriber implements Closeable {
-    private final UserService userService;
-    private final ExecutorService executorService;
 
+    private final ExecutorService executorService;
     private Map<Class, List<Consumer>> eventHandlers = new ConcurrentHashMap<>();
 
     public <T extends DomainEvent> Runnable subscribe(Class<T> eventType, Consumer<T> work) {
